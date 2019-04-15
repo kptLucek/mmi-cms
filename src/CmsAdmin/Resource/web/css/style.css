@@ -3331,7 +3331,7 @@ button.close {
       bottom: -11px;
       margin-left: -6px;
       border-top-color: rgba(0, 0, 0, 0.25); }
-    
+
     .popover.bs-popover-top .arrow::after,
     .popover.bs-popover-auto[x-placement^="top"] .arrow::after {
       bottom: -10px;
@@ -3349,7 +3349,7 @@ button.close {
     .popover.bs-popover-right .arrow::before, .popover.bs-popover-auto[x-placement^="right"] .arrow::before {
       left: -11px;
       border-right-color: rgba(0, 0, 0, 0.25); }
-    
+
     .popover.bs-popover-right .arrow::after,
     .popover.bs-popover-auto[x-placement^="right"] .arrow::after {
       left: -10px;
@@ -3366,7 +3366,7 @@ button.close {
     .popover.bs-popover-bottom .arrow::before, .popover.bs-popover-auto[x-placement^="bottom"] .arrow::before {
       top: -11px;
       border-bottom-color: rgba(0, 0, 0, 0.25); }
-    
+
     .popover.bs-popover-bottom .arrow::after,
     .popover.bs-popover-auto[x-placement^="bottom"] .arrow::after {
       top: -10px;
@@ -3392,7 +3392,7 @@ button.close {
     .popover.bs-popover-left .arrow::before, .popover.bs-popover-auto[x-placement^="left"] .arrow::before {
       right: -11px;
       border-left-color: rgba(0, 0, 0, 0.25); }
-    
+
     .popover.bs-popover-left .arrow::after,
     .popover.bs-popover-auto[x-placement^="left"] .arrow::after {
       right: -10px;
@@ -8989,6 +8989,12 @@ hr.transparent {
     max-width: 100%;
     margin: 15px 30px; }
 
+tr.ui-sortable-helper {
+  opacity: 0.9;
+  display: table;
+  background: white;
+}
+
 #rules {
   margin-top: 30px; }
 
@@ -9466,3 +9472,14 @@ ul.tabs-legacy {
   /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #243B55, #141E30);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ }
+
+/* grid select chosen */
+div.grid .chosen-container {
+  font-weight: normal;
+  width: 142px !important;
+}
+
+div.grid .chosen-container .chosen-drop {
+  width: 700px !important;
+  margin-top: 0px !important;
+}

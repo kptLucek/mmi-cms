@@ -8,24 +8,30 @@ CMS.grid = function () {
         inputBuffer,
         filtering = false;
 
-    var quickSwitch = function(data) {
-        $('.grid-anchor').html(data.body);
-        $('.paginator-anchor').html(data.paginator);
+    var quickSwitch = function (data, parent = null) {
+        if (parent === null) {
+            $('.grid-anchor').html(data.body);
+            $('.paginator-anchor').html(data.paginator);
+        } else {
+            parent.find('.grid-anchor').html(data.body);
+            parent.find('.paginator-anchor').html(data.paginator);
+        }
+        initGridSelect();
         initPicker();
     };
 
-    var rememberCursor = function(object) {
+    var rememberCursor = function (object) {
         inputBuffer = object.val();
         inputCursorPosition = object[0].selectionStart;
         inputName = object.attr('name');
     };
 
     var initPicker = function () {
-        $('.grid-picker').datetimepicker({format:'Y-m-d', allowBlank: true, scrollInput: false, scrollMonth: true, timepicker: false});
-        $.datetimepicker.setLocale('pl');
+        $('.grid-picker').datetimepicker({ format: 'Y-m-d', allowBlank: true, scrollInput: false, scrollMonth: true, timepicker: false });
+        $.datetimepicker.setLocale(request.locale);
     };
 
-    var filter = function(field) {
+    var filter = function (field) {
         var filter = field.attr('name'),
             value = field.val();
         filtering = true;
@@ -33,9 +39,9 @@ CMS.grid = function () {
         $.ajax({
             url: window.location,
             type: 'POST',
-            data: {filter: filter, value: value},
+            data: { filter: filter, value: value },
             success: function (data) {
-                quickSwitch(data);
+                quickSwitch(data, field.closest("table").parent());
                 if (!inputName) {
                     filtering = false;
                     return;
@@ -45,7 +51,7 @@ CMS.grid = function () {
                 element.val(inputBuffer);
                 try {
                     element[0].setSelectionRange(inputCursorPosition, inputCursorPosition);
-                } catch (e) {}
+                } catch (e) { }
                 inputName = null;
                 inputBuffer = null;
                 filtering = false;
@@ -61,7 +67,7 @@ CMS.grid = function () {
             $.ajax({
                 url: window.location,
                 type: 'POST',
-                data: {filter: filter, value: value},
+                data: { filter: filter, value: value },
                 success: function (data) {
                     quickSwitch(data);
                 }
@@ -107,9 +113,11 @@ CMS.grid = function () {
             $.ajax({
                 url: window.location,
                 type: 'POST',
-                data: {order: field, method: method},
+                data: { order: field, method: method },
                 success: function (data) {
                     quickSwitch(data);
+                    initGridSortable();
+                    initGridSelect();
                 }
             });
             return false;
@@ -123,13 +131,42 @@ CMS.grid = function () {
             $.ajax({
                 url: window.location,
                 type: 'POST',
-                data: {id: id[1], name: id[0], value: $(this).val(), checked: $(this).is(':checked')}
+                data: { id: id[1], name: id[0], value: $(this).val(), checked: $(this).is(':checked') }
             });
         });
     };
 
+    var initGridSortable = function () {
+        if ($('table.table-sort').length > 0 && $('table.table-sort').attr('data-sort-url')) {
+            $('table.table-sort tbody').sortable({
+                items: "> tr",
+                handle: '.sort-row',
+                axis: 'y',
+                update: function (event, ui) {
+                    var orderDirection = 'desc';
+                    if ($('table.table-sort a[href$="[order]"]').attr('data-method') === 'orderAsc') {
+                        orderDirection = 'asc';
+                    }
+                    $.post(request.baseUrl + "/?" + $('table.table-sort').attr('data-sort-url'), { order: orderDirection, value: $(this).sortable('toArray', { attribute: "data-id" }) },
+                        function (result) {
+                            if (result) {
+                                alert(result);
+                            }
+                        });
+                }
+            });
+            $('table.table-sort tbody').disableSelection();
+        }
+    };
+
+    var initGridSelect = function () {
+        $('div.grid select[data-chosen="true"]').chosen({ disable_search_threshold: 10 });
+    }
+
     initGridFilter();
     initGridOrder();
+    initGridSortable();
+    initGridSelect();
     initGridOperation();
     initPaginator();
     initPicker();
