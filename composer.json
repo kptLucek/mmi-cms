@@ -27,7 +27,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "mmi/mmi": "*",
+        "mmi/mmi": "dev-feature/more-3rd-party",
         "phpmailer/phpmailer": "~5.2"
     },
     "autoload": {
@@ -37,6 +37,12 @@
             "": "src/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:kptLucek/mmi.git"
+        }
+    ],
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
